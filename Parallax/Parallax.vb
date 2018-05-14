@@ -6,8 +6,8 @@
 Public Class Parallax
     Implements IDisposable
 
-    Private qualityX As Integer = 4
-    Private qualityY As Integer = 4
+    Private qualityX As Integer = 3
+    Private qualityY As Integer = 3
     Private canvasWidth As Integer
     Private canvasHeight As Integer
     Private canvasSize As Integer
@@ -44,12 +44,12 @@ Public Class Parallax
         AddHandler parentForm.MouseDown, Sub(sender1 As Object, e1 As MouseEventArgs)
                                              isUserInteracting = True
                                              pointers.Clear()
-                                             pointers.Add(New Point(e1.X / parentForm.Width * canvasWidth, e1.Y / parentForm.Height * canvasHeight + 30))
+                                             pointers.Add(New Point((e1.X + 10) / parentForm.Width * canvasWidth, (e1.Y + 100) / parentForm.Height * canvasHeight))
                                          End Sub
 
         AddHandler parentForm.MouseMove, Sub(sender1 As Object, e1 As MouseEventArgs)
                                              pointers.Clear()
-                                             pointers.Add(New Point(e1.X / parentForm.Width * canvasWidth, e1.Y / parentForm.Height * canvasHeight + 30))
+                                             pointers.Add(New Point((e1.X + 10) / parentForm.Width * canvasWidth, (e1.Y + 100) / parentForm.Height * canvasHeight))
                                          End Sub
 
         AddHandler parentForm.MouseUp, Sub() isUserInteracting = False
