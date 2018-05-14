@@ -23,6 +23,7 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.TextBoxMsg = New System.Windows.Forms.TextBox()
+        Me.ComboBoxMode = New System.Windows.Forms.ComboBox()
         Me.SuspendLayout()
         '
         'TextBoxMsg
@@ -33,11 +34,22 @@ Partial Class MainForm
         Me.TextBoxMsg.TabIndex = 0
         Me.TextBoxMsg.Text = "Hello World!"
         '
+        'ComboBoxMode
+        '
+        Me.ComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxMode.FormattingEnabled = True
+        Me.ComboBoxMode.Items.AddRange(New Object() {"Watter", "Fire"})
+        Me.ComboBoxMode.Location = New System.Drawing.Point(431, 14)
+        Me.ComboBoxMode.Name = "ComboBoxMode"
+        Me.ComboBoxMode.Size = New System.Drawing.Size(121, 23)
+        Me.ComboBoxMode.TabIndex = 1
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1040, 626)
+        Me.Controls.Add(Me.ComboBoxMode)
         Me.Controls.Add(Me.TextBoxMsg)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Name = "MainForm"
@@ -48,5 +60,5 @@ Partial Class MainForm
 
     End Sub
     Friend WithEvents TextBoxMsg As System.Windows.Forms.TextBox
-
+    Friend WithEvents ComboBoxMode As ComboBox
 End Class

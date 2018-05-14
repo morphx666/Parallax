@@ -2,7 +2,7 @@
     Private p As Parallax
     Private f As Font
 
-    Private textHasChanged As Boolean = True
+    Private refreshBumpMap As Boolean = True
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If p IsNot Nothing Then
@@ -20,8 +20,15 @@
         f = New Font("Tahoma", 28, FontStyle.Bold, GraphicsUnit.Point)
         p = New Parallax(Me)
 
-        AddHandler TextBoxMsg.TextChanged, Sub() textHasChanged = True
-        AddHandler Me.SizeChanged, Sub() textHasChanged = True
+        ComboBoxMode.SelectedIndex = 0
+
+        AddHandler TextBoxMsg.TextChanged, Sub() refreshBumpMap = True
+        AddHandler Me.SizeChanged, Sub() refreshBumpMap = True
+        AddHandler ComboBoxMode.SelectedIndexChanged, Sub()
+                                                          refreshBumpMap = True
+                                                          p.Mode = [Enum].Parse(GetType(Parallax.Modes), ComboBoxMode.SelectedIndex)
+                                                      End Sub
+
     End Sub
 
     Protected Overrides Sub OnPaintBackground(e As PaintEventArgs)
@@ -29,15 +36,15 @@
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         If p IsNot Nothing Then
-            If textHasChanged Then
+            If refreshBumpMap Then
                 p.BumpMampGraphics.Clear(Color.Black)
                 p.BumpMampGraphics.DrawString(TextBoxMsg.Text, f, Brushes.White,
                                                 (p.Image.Width - p.BumpMampGraphics.MeasureString(TextBoxMsg.Text, f).Width) / 2,
                                                 (p.Image.Height - f.Height) / 2)
-                textHasChanged = False
+                refreshBumpMap = False
             End If
 
             e.Graphics.DrawImage(p.Image.Bitmap, Me.DisplayRectangle)
-            End If
+        End If
     End Sub
 End Class
