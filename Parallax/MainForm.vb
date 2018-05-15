@@ -20,6 +20,9 @@
         f = New Font("Tahoma", 28, FontStyle.Bold, GraphicsUnit.Point)
         p = New Parallax(Me, 4, 4)
 
+        For Each m In [Enum].GetValues(GetType(Parallax.Modes))
+            ComboBoxMode.Items.Add(m)
+        Next
         ComboBoxMode.SelectedIndex = 0
 
         AddHandler TextBoxMsg.TextChanged, Sub() refreshBumpMap = True
@@ -39,7 +42,7 @@
                 p.BumpMampGraphics.Clear(Color.Black)
                 p.BumpMampGraphics.DrawString(TextBoxMsg.Text, f, Brushes.White,
                                                 (p.Image.Width - p.BumpMampGraphics.MeasureString(TextBoxMsg.Text, f).Width) / 2,
-                                                (p.Image.Height - f.Height) / 2 + If(p.Mode = Parallax.Modes.Watter, f.Height / 2, 0))
+                                                (p.Image.Height - f.Height) / 2 + If(p.Mode = Parallax.Modes.Fire, 0, f.Height / 2))
                 refreshBumpMap = False
             End If
 

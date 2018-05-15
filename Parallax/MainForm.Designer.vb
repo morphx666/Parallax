@@ -38,7 +38,6 @@ Partial Class MainForm
         '
         Me.ComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxMode.FormattingEnabled = True
-        Me.ComboBoxMode.Items.AddRange(New Object() {"Watter", "Fire"})
         Me.ComboBoxMode.Location = New System.Drawing.Point(431, 14)
         Me.ComboBoxMode.Name = "ComboBoxMode"
         Me.ComboBoxMode.Size = New System.Drawing.Size(121, 23)

@@ -9,6 +9,7 @@ Public Class Parallax
     Public Enum Modes
         Watter = 0
         Fire = 1
+        Ice = 2
     End Enum
 
     Private mQualityX As Integer = 4
@@ -120,6 +121,7 @@ Public Class Parallax
         End Get
         Set(value As Modes)
             mMode = value
+            coolingBrightness = If(mMode = Modes.Ice, 15, 30)
             Initialize()
         End Set
     End Property
@@ -178,6 +180,11 @@ Public Class Parallax
         End SyncLock
     End Sub
 
+    Private Sub Emit(index As Integer)
+        waterBuffer1(index) = 255
+        fireBuffer1(index) = 255
+    End Sub
+
     Private Sub Emit(x As Integer, y As Integer, pixelSize As Integer)
         If x >= canvasWidth Then x = canvasWidth - 1
         If y >= canvasHeight Then y = canvasHeight - 1
@@ -200,12 +207,16 @@ Public Class Parallax
     ' FIXME: This is too slow!
     ' Need to find a way to only process the area affected by the text and not the whole image
     Private Sub ProcessBumpMap()
-        For y As Integer = 0 To canvasHeight - 1
-            For x As Integer = 0 To canvasWidth - 1
-                ' Both do the same thing...
-                If mBumpMap.Bits((x + y * canvasWidth) * 4 + 0) > 0 Then Emit(x, y, 1)
-                'If mBumpMap.Pixel(x, y).R <> 0 Then Emit(x, y)
-            Next
+        'For y As Integer = 0 To canvasHeight - 1
+        '    For x As Integer = 0 To canvasWidth - 1
+        '        ' Both do the same thing...
+        '        If mBumpMap.Bits((x + y * canvasWidth) * 4 + 0) > 0 Then Emit(x, y, 1)
+        '        'If mBumpMap.Pixel(x, y).R <> 0 Then Emit(x, y)
+        '    Next
+        'Next
+
+        For i As Integer = canvasWidth To canvasSize - canvasWidth - 1
+            If mBumpMap.Bits(i * 4) > 0 Then Emit(i)
         Next
     End Sub
 
@@ -264,7 +275,11 @@ Public Class Parallax
             fireBuffer2(i - canvasWidth) = pixel
 
             pixel = ToByte(pixel)
-            mImage.Pixel(i * 4) = Color.FromArgb(pixel, pixel, pixel * (1 - imageCoolingMap(i) / coolingBrightness), 0)
+            If mMode = Modes.Ice Then
+                imageWaterHeightMap(i * 4) = pixel
+            Else
+                mImage.Pixel(i * 4) = Color.FromArgb(pixel, pixel, pixel * (1 - imageCoolingMap(i) / coolingBrightness), 0)
+            End If
         Next
 
         Array.Copy(fireBuffer1, tmpBuffer, canvasSize)
@@ -315,6 +330,11 @@ Public Class Parallax
                         ProcessFire()
                         ProcessBumpMap()
                         ProcessCoolingMap()
+                    Case Modes.Ice
+                        ProcessFire()
+                        ProcessBumpMap()
+                        ProcessCoolingMap()
+                        ProcessParallax()
                 End Select
             End SyncLock
 
