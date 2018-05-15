@@ -53,7 +53,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.TextBoxMsg)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Name = "MainForm"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Parallax"
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -11,8 +11,9 @@ Public Class Parallax
         Fire = 1
     End Enum
 
-    Private qualityX As Integer = 4
-    Private qualityY As Integer = 4
+    Private mQualityX As Integer = 4
+    Private mQualityY As Integer = 4
+    Private mFramesPerSecond As Integer = 30
     Private canvasWidth As Integer
     Private canvasHeight As Integer
     Private canvasSize As Integer
@@ -51,8 +52,11 @@ Public Class Parallax
 
     Public lockObj As New Object()
 
-    Public Sub New(parent As Form)
+    Public Sub New(parent As Form, Optional qualityX As Integer = 4, Optional qualityY As Integer = 4, Optional framesPerSecond As Integer = 30)
         parentForm = parent
+        mQualityX = 4
+        mQualityY = 4
+        mFramesPerSecond = 30
         Initialize()
 
         AddHandler parentForm.SizeChanged, Sub() Initialize()
@@ -70,17 +74,45 @@ Public Class Parallax
 
         AddHandler parentForm.MouseUp, Sub() isUserInteracting = False
 
-        loopThread = New Thread(AddressOf MainLoop)
-        loopThread.Start()
-
         refreshThread = New Thread(Sub()
                                        Do
-                                           parentForm.Invalidate()
                                            Thread.Sleep(33)
+                                           parentForm.Invalidate()
                                        Loop Until abortThreads
                                    End Sub)
-        refreshThread.Start()
+
+        loopThread = New Thread(AddressOf MainLoop)
+        loopThread.Start()
     End Sub
+
+    Public Property FramesPerSecond As Integer
+        Get
+            Return mFramesPerSecond
+        End Get
+        Set(value As Integer)
+            mFramesPerSecond = Math.Max(1, value)
+        End Set
+    End Property
+
+    Public Property QualityX As Integer
+        Get
+            Return mQualityX
+        End Get
+        Set(value As Integer)
+            mQualityX = value
+            Initialize()
+        End Set
+    End Property
+
+    Public Property QualityY As Integer
+        Get
+            Return mQualityY
+        End Get
+        Set(value As Integer)
+            mQualityY = value
+            Initialize()
+        End Set
+    End Property
 
     Public Property Mode As Modes
         Get
@@ -114,8 +146,8 @@ Public Class Parallax
         SyncLock lockObj
             PerlinNoise.Init()
 
-            canvasWidth = Math.Floor(parentForm.DisplayRectangle.Width / qualityX)
-            canvasHeight = Math.Floor(parentForm.DisplayRectangle.Height / qualityY)
+            canvasWidth = Math.Floor(parentForm.DisplayRectangle.Width / mQualityX)
+            canvasHeight = Math.Floor(parentForm.DisplayRectangle.Height / mQualityY)
             canvasSize = canvasWidth * canvasHeight
 
             If mImage IsNot Nothing Then mImage.Dispose()
@@ -263,6 +295,9 @@ Public Class Parallax
     End Sub
 
     Private Sub MainLoop()
+        Thread.Sleep(60)
+        refreshThread.Start()
+
         Do
             SyncLock lockObj
                 If isUserInteracting Then
@@ -283,7 +318,7 @@ Public Class Parallax
                 End Select
             End SyncLock
 
-            Thread.Sleep(10)
+            Thread.Sleep(1000 / mFramesPerSecond)
         Loop Until abortThreads
     End Sub
 

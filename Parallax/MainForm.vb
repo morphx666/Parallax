@@ -18,7 +18,7 @@
         Me.SetStyle(ControlStyles.UserPaint, True)
 
         f = New Font("Tahoma", 28, FontStyle.Bold, GraphicsUnit.Point)
-        p = New Parallax(Me)
+        p = New Parallax(Me, 4, 4)
 
         ComboBoxMode.SelectedIndex = 0
 
@@ -28,7 +28,6 @@
                                                           refreshBumpMap = True
                                                           p.Mode = [Enum].Parse(GetType(Parallax.Modes), ComboBoxMode.SelectedIndex)
                                                       End Sub
-
     End Sub
 
     Protected Overrides Sub OnPaintBackground(e As PaintEventArgs)
@@ -40,7 +39,7 @@
                 p.BumpMampGraphics.Clear(Color.Black)
                 p.BumpMampGraphics.DrawString(TextBoxMsg.Text, f, Brushes.White,
                                                 (p.Image.Width - p.BumpMampGraphics.MeasureString(TextBoxMsg.Text, f).Width) / 2,
-                                                (p.Image.Height - f.Height) / 2)
+                                                (p.Image.Height - f.Height) / 2 + If(p.Mode = Parallax.Modes.Watter, f.Height / 2, 0))
                 refreshBumpMap = False
             End If
 
